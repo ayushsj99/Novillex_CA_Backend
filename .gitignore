@@ -3,3 +3,6 @@
 /venv
 /text.ipynb
 /test_extract.py
+/extracted_transactions_BOI.csv
+/kotak.pdf
+/bank_statement.pdf
