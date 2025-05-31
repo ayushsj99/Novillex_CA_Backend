@@ -192,8 +192,8 @@ class BankStatementExtractor:
             current_balance = float(data['amt2'].replace(",", ""))
             parsed = {
                 'date': data['date'],
-                'transaction_id': data['tran_id'],
-                'reference_number': data['ref'].strip() if data['ref'] else "",
+                #'transaction_id': data['tran_id'],
+                'transaction_id/reference_number':  data['tran_id'] +" "+data['ref'].strip() if data['ref'] and data['tran_id'] else data['tran_id'],
                 'particulars': data['part'].strip(),
                 'debit_amount': None,
                 'credit_amount': None,
@@ -214,16 +214,17 @@ class BankStatementExtractor:
 
         if not transactions:
             return pd.DataFrame(columns=[
-                'Date', 'Transaction ID', 'Reference Number', 'Particulars',
+                'Date', 'Transaction ID/Reference Number', 'Particulars',
                 'Debit Amount', 'Credit Amount', 'Balance Amount', 'Type'
             ])
+
 
         df = pd.DataFrame(transactions)
 
         df = df.rename(columns={
             'date': 'Date',
-            'transaction_id': 'Transaction ID',
-            'reference_number': 'Reference Number',
+            'transaction_id/reference_number': 'Transaction ID/Reference Number',
+            # 'reference_number': 'Reference Number',
             'particulars': 'Particulars',
             'debit_amount': 'Debit Amount',
             'credit_amount': 'Credit Amount',
@@ -273,7 +274,7 @@ def main():
     """
     extractor = BankStatementExtractor()
     
-    pdf_path = "bank_statement.pdf"  # Replace with your PDF file path
+    pdf_path = "./sample_statements/BOI.pdf"  # Replace with your PDF file path
     pdf_password = ""  # If your PDF is password-protected, set the password here
     csv = True  # Set to True if you want to save the DataFrame as CSV
     start_time = time.time()
