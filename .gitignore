@@ -1,3 +1,5 @@
 .venv
 ./venv
 /venv
+/text.ipynb
+/test_extract.py
