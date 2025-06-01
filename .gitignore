@@ -1,8 +1,10 @@
 .venv
 ./venv
 /venv
-/text.ipynb
+./test.ipynb
+/test.ipynb
 /test_extract.py
 /extracted_transactions_BOI.csv
 /kotak.pdf
 /bank_statement.pdf
+/table_strategy.ipynb
