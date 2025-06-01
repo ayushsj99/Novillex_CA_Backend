@@ -1,5 +1,6 @@
 import pandas as pd
 from typing import List, Dict, Tuple
+from database.save_user_data import save_user_and_transactions
 
 class BaseExtractor:
     def __init__(self):
@@ -113,5 +114,7 @@ class BaseExtractor:
         df = self.parse_transactions_to_dataframe(transactions)
         if df.empty:
             raise ValueError("Transaction DataFrame is empty.")
+        
+        save_user_and_transactions('ayush', df)
 
         return metadata, df, self.unmatched_lines, self.unmatched_lines_no
