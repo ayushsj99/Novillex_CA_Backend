@@ -99,4 +99,86 @@ class BOIExtractor(BaseExtractor):
 
         return df
 
-    
+    def extract_metadata(self, bank_name: str, lines_per_page: List[List[str]], transactions: List[str] = None) -> dict:
+        """
+        Extract metadata such as account number, bank name, report period, and opening balance.
+
+        Args:
+            bank_name: Name of the bank (inferred).
+            lines_per_page: List of list of words for each line on each page.
+
+        Returns:
+            metadata: Dictionary containing metadata.
+        """
+        self.metadata = {
+            'bank_name': bank_name,
+            'account_number': None,
+            'report_period': None,
+            'opening_balance': None,
+            'opening_balance_type': None,
+            'closing_balance': None,
+            'closing_balance_type': None,
+            'transaction_period': None,
+            'account_holder_name': None,
+        }
+
+        for page in lines_per_page:
+            for line in page:
+                line_str = " ".join(line).strip()
+
+                # Extract account number
+                if not self.metadata['account_number'] and 'account_number' in self.patterns:
+                    match = self.patterns['account_number'].search(line_str)
+                    if match:
+                        self.metadata['account_number'] = match.group(1)
+
+                # Account Holder Name
+                acc_holder_match = self.patterns['account_holder_name'].search(line_str)
+                if acc_holder_match:
+                        self.metadata['account_holder_name'] = acc_holder_match.group(1).strip()
+        
+                # Extract report period
+                if not self.metadata['report_period'] and 'report_period' in self.patterns:
+                    match = self.patterns['report_period'].search(line_str)
+                    if match:
+                        self.metadata['report_period'] = (match.group(1), match.group(2))
+
+                # Extract opening balance
+                if not self.metadata['opening_balance'] and 'opening_balance' in self.patterns:
+                    match = self.patterns['opening_balance'].search(line_str)
+                    if match:
+                        amount = float(match.group(1).replace(',', ''))
+                        direction_upper = match.group(2).upper()
+                        
+                        self.metadata['opening_balance'] = amount if direction_upper == "CR" else -amount
+                        self.metadata['opening_balance_type'] = direction_upper
+
+                if all([
+                    self.metadata['bank_name'],
+                    self.metadata['account_number'],
+                    self.metadata['report_period'],
+                    self.metadata['opening_balance']
+                ]):
+                    break
+            else:
+                continue
+            break
+        
+        self.metadata['transaction_period'] = (
+                self.patterns['date'].search(transactions[0]).group(),
+                self.patterns['date'].search(transactions[-1]).group()
+            )
+        
+        match = self.patterns['closing_balance'].search(transactions[-1])
+        if match:
+        # If closing balance not found in the expected format, use the last transaction 
+            closing_amount = match.group(1).replace(',', '')
+            self.metadata['closing_balance'] = float(closing_amount)
+            self.metadata['closing_balance_type'] = match.group(2).upper()
+        # Normalize closing balance
+        if self.metadata['closing_balance_type'] == "DR":
+            self.metadata['closing_balance'] *= -1
+        
+        
+
+        return self.metadata

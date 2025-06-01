@@ -1,5 +1,4 @@
 # bank_statement_parser/main.py
-
 import re
 import pdfplumber
 from collections import defaultdict
@@ -85,8 +84,8 @@ def run_extraction(pdf_path: str, password: str = ""):
     return extractor.process_bank_statement(lines_per_page,bank_name)
 
 if __name__ == "__main__":
-    pdf_path = "./sample_statements/kotak.pdf"
-    password = "619132316"
+    pdf_path = "./sample_statements/BOI.pdf"
+    password = ""
 
     metadata, df, unmatched_count, unmatched_lines = run_extraction(pdf_path, password)
 

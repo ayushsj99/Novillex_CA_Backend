@@ -1,8 +1,11 @@
 {
   "account_number": "(?i)Account N(?:umber|o)?\\s*:\\s*([0-9]+(?:/[A-Z]+)?)",
-  "report_period": "(?i)(?:Report\\s+for\\s+the\\s+)?Period\\s*:\\s*(\\d{2}-\\d{2}-\\d{4})\\s*TO\\s*(\\d{2}-\\d{2}-\\d{4})",
+  "account_holder_name": "Account Number\\s*:\\s*\\d+/\\w+\\s+(.*)",
+  "report_period": "Report for the Period\\s*:(\\d{2}-\\d{2}-\\d{4})TO(\\d{2}-\\d{2}-\\d{4})",
   "opening_balance": "Account\\s+Opening\\s+balance\\s*:\\s*(\\d{1,3}(?:,\\d{3})*|\\d+)\\.\\d{2}(DR|CR)",
   "bank_name": "(?i)\\b(?:[A-Z&]{2,}\\s+)*BANK(?:\\s+[A-Z&]{2,})*\\b(?:,\\s*\\w+)?",
   "transaction": "^\\d{2}-\\d{2}-\\d{4}[A-Z0-9 ]{8,}\\s+.*\\d{1,3}(?:,\\d{3})*\\.\\d{2}\\s*(?:\\d{1,3}(?:,\\d{3})*\\.\\d{2}\\s*)?(DR|CR)$",
+  "date": "(\\d{2}-\\d{2}-\\d{4})\\s?",
+  "closing_balance": "(\\d{1,3}(?:,\\d{2,3})*\\.\\d{2})\\s*([DdCc][Rr])",
   "transaction_detail": "(?P<date>\\d{2}-\\d{2}-\\d{4})\\s*(?P<tran_id>[A-Z0-9]{6,10})\\s+(?:(?P<ref>[A-Za-z0-9][A-Za-z0-9/._-]{8}\\d)\\s)?(?P<part>.*?)(?P<amt1>\\d{1,3}(?:,\\d{2,3})*\\.\\d{2})?\\s*(?P<amt2>\\d{1,3}(?:,\\d{2,3})*\\.\\d{2})(?P<type>(?i:CR|DR))"
 }

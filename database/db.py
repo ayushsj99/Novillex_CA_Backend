@@ -40,6 +40,26 @@ user_table_hashes = Table(
     Column('created_at', DateTime, default=datetime.now)
 )
 
+# Table for storing metadata related to transaction tables
+user_table_metadata = Table(
+    'user_table_metadata', metadata,
+    Column('id', Integer, primary_key=True),
+    Column('user_id', Integer, ForeignKey('users.id')),
+    Column('table_hash_id', Integer, ForeignKey('user_table_hashes.id')),
+    Column('bank_name', Text),
+    Column('account_number', Text),
+    Column('report_period', Text),
+    Column('opening_balance', Float),
+    Column('opening_balance_type', String),
+    Column('closing_balance', Float),
+    Column('closing_balance_type', String),
+    Column('transaction_period', Text),
+    Column('account_holder_name', Text),
+    Column('metadata_hash', Text, nullable=False),
+    Column('created_at', DateTime, default=datetime.now)
+)
+
+
 # Create all tables in DB
 def create_tables():
     metadata.create_all(engine)
