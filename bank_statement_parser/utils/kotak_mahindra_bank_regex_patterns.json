@@ -1,0 +1,8 @@
+{
+  "account_number": "(?i)Account N(?:umber|o)?\\s*:\\s*([0-9]+(?:/[A-Z]+)?)",
+  "report_period": "(?i)(?:Report\\s+for\\s+the\\s+)?Period\\s*:\\s*(\\d{2}-\\d{2}-\\d{4})\\s*TO\\s*(\\d{2}-\\d{2}-\\d{4})",
+  "opening_balance": "(?i)Opening\\s+Balance\\s*:\\s*([\\d,]+\\.\\d{2})\\((Cr|Dr)\\)",
+  "bank_name": "(?i)\\b(?:[A-Z&]{2,}\\s+)*BANK(?:\\s+[A-Z&]{2,})*\\b(?:,\\s*\\w+)?",
+  "transaction": "(?i)^(\\d{2}-\\d{2}-\\d{4})\\s+.*?(\\d{1,3}(?:,\\d{3})*|\\d+)\\.\\d{2}\\((Dr|Cr)\\)\\s+(\\d{1,3}(?:,\\d{3})*|\\d+)\\.\\d{2}\\((Cr)\\)$",
+  "transaction_detail": "^(?P<date>\\d{2}-\\d{2}-\\d{4})\\s+(?P<part>.*?)\\s+(?P<ref>[A-Za-z0-9\\-/\\.]+)\\s+(?P<amt1>[\\d,]+\\.\\d{2})\\((?P<amt1_type>Dr|Cr)\\)\\s+(?P<amt2>[\\d,]+\\.\\d{2})\\((?P<amt2_type>Dr|Cr)\\)$"
+}
