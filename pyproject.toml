@@ -12,5 +12,7 @@ dependencies = [
     "pandas>=2.2.3",
     "pdf2image>=1.17.0",
     "pdfplumber>=0.11.6",
+    "psycopg2>=2.9.10",
+    "sqlalchemy>=2.0.41",
     "uvicorn>=0.34.2",
 ]

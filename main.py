@@ -5,6 +5,10 @@ import pdfplumber
 from collections import defaultdict
 from bank_statement_parser.banks.BOI_pdf_extract import BOIExtractor
 from bank_statement_parser.banks.kotak_pdf_extract import KotakExtractor
+from database.db import create_tables
+
+# Ensure database tables are created
+create_tables()
 # Add other banks as needed
 
 BANK_EXTRACTOR_MAP = {
@@ -89,3 +93,4 @@ if __name__ == "__main__":
     print("📄 Metadata:\n", metadata)
     print("\n🔍 First few transactions:")
     print(df.head())
+    print(df.columns)
