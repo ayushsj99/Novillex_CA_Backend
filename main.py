@@ -19,7 +19,7 @@ app.include_router(metadata.router, prefix="/api/v1", tags=["Metadata"])
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # Use specific origin in production
+    allow_origins=["*"],  # Use specific origin in production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
