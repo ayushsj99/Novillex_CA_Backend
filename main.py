@@ -5,6 +5,28 @@ from collections import defaultdict
 from bank_statement_parser.banks.BOI_pdf_extract import BOIExtractor
 from bank_statement_parser.banks.kotak_pdf_extract import KotakExtractor
 from database.db import create_tables
+from fastapi import FastAPI
+from api.endpoints import metadata
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI()
+
+app.include_router(metadata.router, prefix="/api/v1", tags=["Metadata"])
+
+
+# Allow frontend to connect (important for Axios + ngrok)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Use specific origin in production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+
+)
+
+
 
 # Ensure database tables are created
 create_tables()
