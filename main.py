@@ -1,47 +1,45 @@
 # bank_statement_parser/main.py
+
 import re
 import pdfplumber
 from collections import defaultdict
-from bank_statement_parser.banks.BOI_pdf_extract import BOIExtractor
-from bank_statement_parser.banks.kotak_pdf_extract import KotakExtractor
-from database.db import create_tables
-from fastapi import FastAPI
-from api.endpoints import metadata
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from bank_statement_parser.banks.BOI_pdf_extract import BOIExtractor
+from bank_statement_parser.banks.kotak_pdf_extract import KotakExtractor
+from database.db import create_tables
+from api.endpoints import metadata
+
 app = FastAPI()
 
+# Register API routes
 app.include_router(metadata.router, prefix="/api/v1", tags=["Metadata"])
 
-
-# Allow frontend to connect (important for Axios + ngrok)
-
+# CORS middleware (adjust allowed origins in production)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Use specific origin in production
+    allow_origins=["*"],  # TODO: Restrict in production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
-
 )
 
-
-
-# Ensure database tables are created
+# Create tables when app starts
 create_tables()
-# Add other banks as needed
 
+# Bank extractor registry
 BANK_EXTRACTOR_MAP = {
     "BANK OF INDIA": BOIExtractor,
-    "KOTAK MAHINDRA BANK": KotakExtractor,  # Example, replace with actual extractor
-    # Add more banks as needed
+    "KOTAK MAHINDRA BANK": KotakExtractor,
+    # Add more bank extractors as needed
 }
 
-# List of known bank names for fuzzy matching
+# Load known bank names for detection
 with open('bank_names.txt', 'r', encoding='utf-8') as f:
     bank_names = [line.strip() for line in f if line.strip()]
 
+# Regex pattern to extract bank name-like text
 bank_name_pattern = re.compile(
     r"(?i)\b(?:[A-Z&]{2,}\s+)*BANK(?:\s+[A-Z&]{2,})*\b(?:,\s*\w+)?"
 )
@@ -67,7 +65,7 @@ def extract_lines_from_pdf(pdf_path: str, password: str = ""):
 
         page_segments = []
         for y in sorted(lines):
-            line = sorted(lines[y])  # Sort left to right
+            line = sorted(lines[y])  # Sort words left to right
             page_segments.append([text for _, text in line])
         lines_per_page.append(page_segments)
 
@@ -103,8 +101,11 @@ def run_extraction(pdf_path: str, password: str = ""):
         raise ValueError(f"No extractor defined for bank: {bank_name}")
 
     extractor = extractor_class(bank_name)
-    return extractor.process_bank_statement(lines_per_page,bank_name)
+    return extractor.process_bank_statement(lines_per_page, bank_name)
 
+# === Test/Development Code ===
+# Uncomment below to run standalone for testing
+"""
 if __name__ == "__main__":
     pdf_path = "./sample_statements/kotak.pdf"
     password = "619132316"
@@ -115,3 +116,4 @@ if __name__ == "__main__":
     print("\n🔍 First few transactions:")
     print(df.head())
     print(df.columns)
+"""
