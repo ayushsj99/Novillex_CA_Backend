@@ -74,6 +74,6 @@ class BaseExtractor:
         if df.empty:
             raise ValueError("Transaction DataFrame is empty.")
         
-        save_user_and_transactions('ayush', df, self.metadata)
+        # save_user_and_transactions('ayush', df, self.metadata)
 
         return metadata, df, self.unmatched_lines, self.unmatched_lines_no
