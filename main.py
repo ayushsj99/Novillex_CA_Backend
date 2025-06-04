@@ -13,6 +13,51 @@ from api.endpoints import metadata
 
 app = FastAPI()
 
+#####################################################################
+# from api.endpoints.supabase_test import fetch_table
+
+# @app.get("/api/v1/test_supabase")
+# def test_supabase():
+#     try:
+#         data = fetch_table("your_table_name")  # Replace with actual table
+#         return {"success": True, "rows": data}
+#     except Exception as e:
+#         return {"success": False, "error": str(e)}
+
+######################################################################
+
+
+from sqlalchemy import create_engine
+# from sqlalchemy.pool import NullPool
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from .env
+load_dotenv()
+
+# Fetch variables
+USER = os.getenv("user")
+PASSWORD = os.getenv("password")
+HOST = os.getenv("host")
+PORT = os.getenv("port")
+DBNAME = os.getenv("dbname")
+
+# Construct the SQLAlchemy connection string
+DATABASE_URL = f"postgresql+psycopg2://{USER}:{PASSWORD}@{HOST}:{PORT}/{DBNAME}?sslmode=require"
+
+# Create the SQLAlchemy engine
+engine = create_engine(DATABASE_URL)
+# If using Transaction Pooler or Session Pooler, we want to ensure we disable SQLAlchemy client side pooling -
+# https://docs.sqlalchemy.org/en/20/core/pooling.html#switching-pool-implementations
+# engine = create_engine(DATABASE_URL, poolclass=NullPool)
+
+# Test the connection
+try:
+    with engine.connect() as connection:
+        print("Connection successful!")
+except Exception as e:
+    print(f"Failed to connect: {e}")
+
 # Register API routes
 app.include_router(metadata.router, prefix="/api/v1", tags=["Metadata"])
 

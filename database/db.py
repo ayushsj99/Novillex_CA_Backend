@@ -10,6 +10,7 @@ load_dotenv()  # Load environment variables from .env file
 # PostgreSQL connection URL — update these as per your local setup
 DATABASE_URL = os.getenv('SUPABASE_DATABASE_URL')
 
+
 engine = create_engine(DATABASE_URL)
 metadata = MetaData()
 
