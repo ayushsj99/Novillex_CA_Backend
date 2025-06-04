@@ -18,8 +18,8 @@ PORT = os.getenv("port")
 DBNAME = os.getenv("dbname")
 
 # Prefer assembled connection string if all parts are set
-if USER and PASSWORD and HOST and PORT and DBNAME:
-    DATABASE_URL = f"postgresql+psycopg2://{USER}:{PASSWORD}@{HOST}:{PORT}/{DBNAME}?sslmode=require"
+# if USER and PASSWORD and HOST and PORT and DBNAME:
+DATABASE_URL = f"postgresql+psycopg2://{USER}:{PASSWORD}@{HOST}:{PORT}/{DBNAME}?sslmode=require"
 # else:
 #     # Fallback to full DATABASE_URL (used in Render/Supabase)
 #     DATABASE_URL = os.getenv("SUPABASE_DATABASE_URL")
