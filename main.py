@@ -1,14 +1,15 @@
 # bank_statement_parser/main.py
 
+from database.db import create_tables
+# Create tables when app starts
+create_tables()
 import re
 import pdfplumber
 from collections import defaultdict
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
 from bank_statement_parser.banks.BOI_pdf_extract import BOIExtractor
 from bank_statement_parser.banks.kotak_pdf_extract import KotakExtractor
-from database.db import create_tables
 from api.endpoints import metadata
 
 app = FastAPI()
@@ -70,8 +71,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Create tables when app starts
-create_tables()
+
 
 # Bank extractor registry
 BANK_EXTRACTOR_MAP = {
