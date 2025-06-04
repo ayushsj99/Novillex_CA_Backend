@@ -20,9 +20,9 @@ DBNAME = os.getenv("dbname")
 # Prefer assembled connection string if all parts are set
 if USER and PASSWORD and HOST and PORT and DBNAME:
     DATABASE_URL = f"postgresql+psycopg2://{USER}:{PASSWORD}@{HOST}:{PORT}/{DBNAME}?sslmode=require"
-else:
-    # Fallback to full DATABASE_URL (used in Render/Supabase)
-    DATABASE_URL = os.getenv("SUPABASE_DATABASE_URL")
+# else:
+#     # Fallback to full DATABASE_URL (used in Render/Supabase)
+#     DATABASE_URL = os.getenv("SUPABASE_DATABASE_URL")
 
 if not DATABASE_URL:
     raise ValueError("❌ DATABASE_URL is not set. Please configure your environment variables.")
