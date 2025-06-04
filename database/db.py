@@ -2,9 +2,13 @@
 from sqlalchemy import create_engine, Table, Column, Integer, String, Date, Float, MetaData, ForeignKey, TIMESTAMP, Text, DateTime
 from datetime import datetime
 import sqlalchemy as sa
+import os
+from dotenv import load_dotenv
+
+load_dotenv()  # Load environment variables from .env file
 
 # PostgreSQL connection URL — update these as per your local setup
-DATABASE_URL = "postgresql+psycopg2://postgres:datatoheaven@localhost:5432/bank_statement_db"
+DATABASE_URL = os.getenv('SUPABASE_DATABASE_URL')
 
 engine = create_engine(DATABASE_URL)
 metadata = MetaData()
