@@ -44,3 +44,11 @@ def get_transaction_data_from_table(table_name: str):
         columns = result.keys()
         rows = result.fetchall()
         return [dict(zip(columns, row)) for row in rows]
+
+
+def get_opening_balance(user_id: int) -> float:
+    stmt = select(user_table_metadata.c.opening_balance).where(user_table_metadata.c.user_id == user_id).limit(1)
+    with engine.connect() as conn:
+        result = conn.execute(stmt).fetchone()
+        return float(result[0]) if result else None
+
