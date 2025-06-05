@@ -7,5 +7,10 @@
   "transaction": "^\\d{2}-\\d{2}-\\d{4}[A-Z0-9 ]{8,}\\s+.*\\d{1,3}(?:,\\d{3})*\\.\\d{2}\\s*(?:\\d{1,3}(?:,\\d{3})*\\.\\d{2}\\s*)?(DR|CR)$",
   "date": "(\\d{2}-\\d{2}-\\d{4})\\s?",
   "closing_balance": "(\\d{1,3}(?:,\\d{2,3})*\\.\\d{2})\\s*([DdCc][Rr])",
-  "transaction_detail": "(?P<date>\\d{2}-\\d{2}-\\d{4})\\s*(?P<tran_id>[A-Z0-9]{6,10})\\s+(?:(?P<ref>[A-Za-z0-9][A-Za-z0-9/._-]{8}\\d)\\s)?(?P<part>.*?)(?P<amt1>\\d{1,3}(?:,\\d{2,3})*\\.\\d{2})?\\s*(?P<amt2>\\d{1,3}(?:,\\d{2,3})*\\.\\d{2})(?P<type>(?i:CR|DR))"
+  "transaction_detail": "(?P<date>\\d{2}-\\d{2}-\\d{4})\\s*(?P<tran_id>[A-Z0-9]{6,10})\\s+(?:(?P<ref>[A-Za-z0-9][A-Za-z0-9/._-]{8}\\d)\\s)?(?P<part>.*?)(?P<amt1>\\d{1,3}(?:,\\d{2,3})*\\.\\d{2})?\\s*(?P<amt2>\\d{1,3}(?:,\\d{2,3})*\\.\\d{2})(?P<type>(?i:CR|DR))",
+
+  "penalty_pattern": "(?i)(?:penalty|fine|chargeback|penal)",
+  "bank_charges_pattern": "(?i)(?:bank charges|service charge|processing fee)",
+  "cash_deposit_pattern": "(?i)(?:cash deposit|cash dep|cash received)",
+  "cash_withdrawal_pattern": "(?i)(?:cash withdrawal|atm withdrawal|cash wdl)"
 }

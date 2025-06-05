@@ -69,6 +69,17 @@ def save_user_and_transactions(username: str, df: pd.DataFrame, metadata_dict: d
 
     # Check for duplicates
     existing_hashes = get_existing_hashes(user_id)
+  
+##############Temporary Restriction##############
+
+  
+    # 🚫 Restrict user from creating more than 1 transaction table (temporarily)
+    if existing_hashes:
+        print(f"⛔ User '{username}' already has a transaction table. Multiple uploads are currently restricted.")
+        return
+    
+############## Temporary Restriction End ##############
+
     for table, h in existing_hashes.items():
         if h == txn_hash:
             print(f"🚫 Duplicate transaction data already saved in table '{table}'.")

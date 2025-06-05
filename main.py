@@ -10,7 +10,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from bank_statement_parser.banks.BOI_pdf_extract import BOIExtractor
 from bank_statement_parser.banks.kotak_pdf_extract import KotakExtractor
-from api.endpoints import metadata
+from api.endpoints import metadata, month_wise_analysis
 
 app = FastAPI()
 
@@ -60,7 +60,8 @@ load_dotenv()
 #     print(f"Failed to connect: {e}")
 
 # Register API routes
-app.include_router(metadata.router, prefix="/api/v1", tags=["Metadata"])
+app.include_router(metadata.router, prefix="/metadata", tags=["Metadata"])
+app.include_router(month_wise_analysis.router, prefix="/summary", tags=["Month Wise Analysis"])
 
 # CORS middleware (adjust allowed origins in production)
 app.add_middleware(
@@ -150,10 +151,10 @@ def run_extraction(pdf_path: str, password: str = ""):
 
 # === Test/Development Code ===
 # Uncomment below to run standalone for testing
-"""
+
 if __name__ == "__main__":
-    pdf_path = "./sample_statements/kotak.pdf"
-    password = "619132316"
+    pdf_path = "./sample_statements/BOI.pdf"
+    password = ""
 
     metadata, df, unmatched_count, unmatched_lines = run_extraction(pdf_path, password)
 
@@ -161,4 +162,4 @@ if __name__ == "__main__":
     print("\n🔍 First few transactions:")
     print(df.head())
     print(df.columns)
-"""
+
