@@ -10,7 +10,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from bank_statement_parser.banks.BOI_pdf_extract import BOIExtractor
 from bank_statement_parser.banks.kotak_pdf_extract import KotakExtractor
-from api.endpoints import metadata, month_wise_analysis, transactions
+from api.endpoints import metadata, month_wise_analysis, transactions, daily_balance_per_month, overview_details
 
 app = FastAPI()
 
@@ -63,6 +63,8 @@ load_dotenv()
 app.include_router(metadata.router, prefix="/metadata", tags=["Metadata"])
 app.include_router(month_wise_analysis.router, prefix="/summary", tags=["Month Wise Analysis"])
 app.include_router(transactions.router, prefix="/transactions", tags=["Transactions"])
+app.include_router(daily_balance_per_month.router, prefix="/daily-balance", tags=["Daily Balance"])
+app.include_router(overview_details.router, prefix="/overview", tags=["Overview Details"])
 
 
 # CORS middleware (adjust allowed origins in production)
