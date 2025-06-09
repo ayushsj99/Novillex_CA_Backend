@@ -1,0 +1,178 @@
+openapi: 3.0.3
+info:
+  title: Bank Statement Analyzer API
+  version: 1.0.0
+  description: API to upload and analyze bank statements with various summaries and metadata.
+
+servers:
+  - url: http://localhost:8000
+
+paths:
+  /upload/upload-statement:
+    post:
+      tags:
+        - Upload Statement
+      summary: Upload bank statement PDF
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                file:
+                  type: string
+                  format: binary
+                password:
+                  type: string
+                  description: Optional password for the PDF
+      responses:
+        '200':
+          description: File uploaded successfully
+        '400':
+          description: Validation or user-related errors
+        '500':
+          description: Server error
+          
+  /extract/extract-statement:
+    get:
+      tags:
+        - Extraction
+      summary: Extract and analyze bank statement PDF for a user
+      parameters:
+        - in: query
+          name: username
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns extracted metadata and sample transactions
+        '404':
+          description: PDF not found for the user
+        '500':
+          description: Server error during extraction
+
+
+  /metadata/get-metadata:
+    get:
+      tags:
+        - Metadata
+      summary: Get user metadata
+      parameters:
+        - in: query
+          name: username
+          schema:
+            type: string
+        - in: query
+          name: table_hash_id
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Metadata fetched
+
+  /monthly-balance-chart/monthly-avg-balance:
+    get:
+      tags:
+        - Monthly Balance Chart
+      summary: Get monthly average balance
+      parameters:
+        - in: query
+          name: username
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns monthly average balance
+
+  /monthly-debit-credit/monthly-debit-credit:
+    get:
+      tags:
+        - Monthly Debit/Credit Summary
+      summary: Monthly debit and credit totals
+      parameters:
+        - in: query
+          name: username
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns monthly debit/credit totals
+
+  /monthly-cashflow/monthly-cashflow:
+    get:
+      tags:
+        - Monthly Cashflow Summary
+      summary: Monthly net cashflow
+      parameters:
+        - in: query
+          name: username
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns monthly net cashflow
+
+  /daily-balance/get-daily-balance:
+    get:
+      tags:
+        - Daily Balance
+      summary: Get daily balance by month
+      parameters:
+        - in: query
+          name: username
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns daily balances
+
+  /overview/overview_data:
+    get:
+      tags:
+        - Overview Details
+      summary: Overview summary
+      parameters:
+        - in: query
+          name: username
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns overview analytics
+
+  /transactions/get-all-transactions:
+    get:
+      tags:
+        - Transactions
+      summary: Get all user transactions
+      parameters:
+        - in: query
+          name: username
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns all transactions
+
+  /summary/get-monthly-summary:
+    get:
+      tags:
+        - Month Wise Analysis
+      summary: Get monthly debit/credit summary
+      parameters:
+        - in: query
+          name: username
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Monthly summary
+
+  

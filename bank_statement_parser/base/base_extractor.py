@@ -46,7 +46,7 @@ class BaseExtractor:
         """
         raise NotImplementedError("parse_transactions_to_dataframe() must be implemented in child class.")
 
-    def process_bank_statement(self, lines_per_page: List[List[str]], bank_name: str) -> Tuple[Dict, pd.DataFrame, int, List[int]]:
+    def process_bank_statement(self, lines_per_page: List[List[str]], bank_name: str, username: str) -> Tuple[Dict, pd.DataFrame, int, List[int]]:
         """
         Full processing pipeline to extract metadata and transaction dataframe.
 
@@ -74,6 +74,6 @@ class BaseExtractor:
         if df.empty:
             raise ValueError("Transaction DataFrame is empty.")
         
-        save_user_and_transactions('rahul', df, self.metadata)
+        save_user_and_transactions(username, df, self.metadata)
 
         return metadata, df, self.unmatched_lines, self.unmatched_lines_no

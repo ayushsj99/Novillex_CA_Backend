@@ -62,7 +62,7 @@ def analytics_summary(username: Optional[str] = Query(None)):
     full_month_range = pd.period_range(df['date'].min(), df['date'].max(), freq='M')
     no_txn_months = sorted([str(m) for m in full_month_range if m not in active_months])
 
-    end = pd.to_datetime("2024-09-30")
+    end = df['date'].max()
     start_12 = end - pd.DateOffset(months=12) + timedelta(days=1)
     start_3 = end - pd.DateOffset(months=3) + timedelta(days=1)
 

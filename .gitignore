@@ -11,3 +11,5 @@
 /.env
 .env
 /debug_summary.py
+/bank_statements
+/passwords
