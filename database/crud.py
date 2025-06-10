@@ -2,6 +2,7 @@ from sqlalchemy import select
 from database.db import engine, user_table_metadata, users, user_table_hashes
 from sqlalchemy import text
 from sqlalchemy.orm import Session
+from sqlalchemy import Table, Column, Integer, String, Float, DateTime, MetaData, Date, Text
 
 def get_metadata_by_user_id(user_id: int):
     with Session(engine) as session:
@@ -51,4 +52,26 @@ def get_opening_balance(user_id: int) -> float:
     with engine.connect() as conn:
         result = conn.execute(stmt).fetchone()
         return float(result[0]) if result else None
+    
+
+def create_transaction_table(table_name: str):
+    metadata = MetaData()
+    table = Table(
+        table_name, metadata,
+        Column("id", Integer, primary_key=True, autoincrement=True),
+        Column("user_id", Integer),
+        Column("date", Date),
+        Column("transaction_id", String),
+        Column("particulars", Text),
+        Column("debit_amount", Float),
+        Column("credit_amount", Float),
+        Column("balance_amount", Float),
+        Column("type", String),
+        Column("optional_1", String, nullable=True),
+        Column("optional_2", String, nullable=True),
+        Column("optional_3", String, nullable=True),
+        Column("created_at", DateTime),
+    )
+    metadata.create_all(engine)  # Actually creates the table in DB
+
 

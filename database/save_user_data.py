@@ -5,6 +5,7 @@ from .db import engine, users, user_table_hashes, user_table_metadata
 import pandas as pd
 from datetime import datetime
 import hashlib
+from .crud import create_transaction_table
 
 # Create a session
 Session = sessionmaker(bind=engine)
@@ -90,8 +91,11 @@ def save_user_and_transactions(username: str, df: pd.DataFrame, metadata_dict: d
     table_name = f"transactions_user_{user_id}_{table_version}"
 
     try:
+        # 1️⃣ Create the table with new schema
+        create_transaction_table(table_name)
+        
         # Save to Postgres (will fail if table exists)
-        df.to_sql(table_name, con=engine, if_exists='fail', index=False)
+        df.to_sql(table_name, con=engine, if_exists='append', index=False)
 
         # Save hash to user_table_hashes
         result = session.execute(user_table_hashes.insert().values(
