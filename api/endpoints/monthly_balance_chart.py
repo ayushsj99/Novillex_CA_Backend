@@ -17,7 +17,7 @@ def monthly_avg_balance(username: str):
     if not table_names:
         raise HTTPException(status_code=404, detail=f"No transaction tables found for user '{username}'")
 
-    latest_table = sorted(table_names)[-1]  # You can also sort by version if needed
+    latest_table = sorted(table_names)[-1]
 
     # Step 3: Load transaction data
     transactions = get_transaction_data_from_table(latest_table)
@@ -28,14 +28,25 @@ def monthly_avg_balance(username: str):
     df['date'] = pd.to_datetime(df['date'], errors='coerce')
     df = df.dropna(subset=['date', 'balance_amount'])
 
-    # Step 4: Calculate monthly average balance
-    df['month'] = df['date'].dt.to_period('M').astype(str)
+    # Step 4: Use accurate daily average logic
+    df = df[['date', 'balance_amount']].sort_values('date')
+    df = df.drop_duplicates(subset='date', keep='last')  # One balance per day (latest if multiple)
+
+    # Create full date range from min to max
+    full_range = pd.date_range(start=df['date'].min(), end=df['date'].max(), freq='D')
+    df = df.set_index('date').reindex(full_range).rename_axis('date')
+
+    # Forward fill missing balances
+    df['balance_amount'] = df['balance_amount'].ffill()
+
+    # Group by month and calculate mean
+    df['month'] = df.index.to_period('M').astype(str)
     result_df = (
         df.groupby('month')['balance_amount']
         .mean()
         .round(2)
         .reset_index()
-        .rename(columns={"balance_amount": "average_balance"})
+        .rename(columns={'balance_amount': 'average_balance'})
     )
 
     return {

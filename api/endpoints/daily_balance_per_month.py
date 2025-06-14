@@ -28,16 +28,25 @@ def get_daily_balance(username: Optional[str] = Query(None)):
     if not all_data:
         return {}
 
+    # Step 1: Create DataFrame
     df = pd.DataFrame(all_data)
-
     df['date'] = pd.to_datetime(df['date'], errors='coerce')
     df = df.dropna(subset=['date', 'balance_amount'])
-    df = df.sort_values(by='date')
-    df = df.drop_duplicates(subset=['date'], keep='last')
 
-    df['month'] = df['date'].dt.strftime('%Y-%m')
-    df['date'] = df['date'].dt.strftime('%Y-%m-%d')
-    df.rename(columns={'balance_amount': 'balance'}, inplace=True)
+    # Step 2: Keep only the last balance per day
+    df = df.sort_values('date')
+    df = df.drop_duplicates(subset='date', keep='last')
+
+    # Step 3: Create a complete date range and reindex
+    full_range = pd.date_range(start=df['date'].min(), end=df['date'].max(), freq='D')
+    df = df.set_index('date').reindex(full_range).rename_axis('date')
+
+    # Step 4: Forward fill missing balances
+    df['balance'] = df['balance_amount'].ffill()
+
+    # Step 5: Prepare clean output
+    df['month'] = df.index.to_period('M').astype(str)
+    df['date'] = df.index.strftime('%Y-%m-%d')
     df = df.replace({np.nan: None, np.inf: None, -np.inf: None})
 
     result = {
