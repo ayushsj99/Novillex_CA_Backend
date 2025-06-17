@@ -175,4 +175,25 @@ paths:
         '200':
           description: Monthly summary
 
+  /cashflow/cashflow-page:
+    get:
+      tags:
+        - Cashflow Page
+      summary: Get financial summary for a user
+      parameters:
+        - in: query
+          name: username
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns financial summary data
+        '400':
+          description: Bad request if username is missing
+        '500':
+          description: Server error during summary retrieval
+        '404':
+          description: User not found or no data available
+
   

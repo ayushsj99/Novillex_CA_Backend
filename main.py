@@ -13,7 +13,8 @@ from api.endpoints import (
     monthly_debit_credit_chart,
     cashflow_chart,
     upload_statement,
-    extract_statements
+    extract_statements,
+    cashflowPage
 )
 
 # Initialize FastAPI app
@@ -33,6 +34,7 @@ app.include_router(monthly_debit_credit_chart.router, prefix="/monthly-debit-cre
 app.include_router(cashflow_chart.router, prefix="/monthly-cashflow", tags=["Monthly Cashflow Summary"])
 app.include_router(upload_statement.router, prefix="/upload", tags=["Upload Statement"])
 app.include_router(extract_statements.router, prefix="/extract", tags=["Extract Statement"])
+app.include_router(cashflowPage.router, prefix="/cashflow", tags=["Cashflow Page"])
 
 # CORS middleware (adjust allowed origins in production)
 app.add_middleware(
